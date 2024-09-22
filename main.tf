@@ -46,6 +46,30 @@ resource "github_repository" "repository" {
       cname      = pages.value.cname
     }
   }
+
+  dynamic "security_and_analysis" {
+    for_each = var.security_and_analysis != null ? [var.security_and_analysis] : []
+    content {
+      dynamic "advanced_security" {
+        for_each = security_and_analysis.value.advanced_security != null ? [security_and_analysis.value.advanced_security] : []
+        content {
+          status = advanced_security.value.status
+        }
+      }
+      dynamic "secret_scanning" {
+        for_each = security_and_analysis.value.secret_scanning != null ? [security_and_analysis.value.secret_scanning] : []
+        content {
+          status = secret_scanning.value.status
+        }
+      }
+      dynamic "secret_scanning_push_protection" {
+        for_each = security_and_analysis.value.secret_scanning_push_protection != null ? [security_and_analysis.value.secret_scanning_push_protection] : []
+        content {
+          status = secret_scanning_push_protection.value.status
+        }
+      }
+    }
+  }
 }
 
 # Configuration for GitHub Actions secrets and variables

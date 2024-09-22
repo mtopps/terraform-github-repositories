@@ -1,11 +1,27 @@
 # terraform-github-repositories
-Terraform module to provision github repositories(WIP)
+
+Terraform module to provision GitHub repositories with enhanced functionality for individual users.
+
+## Overview
+
+This Terraform module is designed primarily for individual GitHub users who are not part of a team or organization. It provides a streamlined way to create and manage GitHub repositories with additional features:
+
+- Create public or private repositories with customizable settings
+- Enable or disable GitHub features like Issues, Projects, and Wikis
+- Set up GitHub Pages configuration
+- Manage repository visibility and archiving
+- Configure branch protection rules and merge settings
+- Add topics to your repository for better discoverability
+- Create GitHub Actions secrets and variables for CI/CD deployments
+
+This module is particularly useful for developers who want to automate their GitHub repository setup and maintain consistency across multiple projects. It allows for easy management of repository settings and secrets, which is especially valuable for individual developers working on multiple projects or maintaining open-source contributions.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.0 |
 
 ## Providers
@@ -56,6 +72,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | The name of the repository | `string` | n/a | yes |
 | <a name="input_pages"></a> [pages](#input\_pages) | GitHub Pages configuration | <pre>object({<br>    source = object({<br>      branch = string<br>      path   = optional(string)<br>    })<br>    build_type = optional(string)<br>    cname      = optional(string)<br>  })</pre> | `null` | no |
 | <a name="input_plaintext_secrets"></a> [plaintext\_secrets](#input\_plaintext\_secrets) | (Optional) Configuring plaintext actions secrets. | `map(string)` | `{}` | no |
+| <a name="input_security_and_analysis"></a> [security\_and\_analysis](#input\_security\_and\_analysis) | Security and analysis settings for the repository | <pre>object({<br>    advanced_security = optional(object({<br>      status = string<br>    }))<br>    secret_scanning = optional(object({<br>      status = string<br>    }))<br>    secret_scanning_push_protection = optional(object({<br>      status = string<br>    }))<br>  })</pre> | `null` | no |
 | <a name="input_squash_merge_commit_message"></a> [squash\_merge\_commit\_message](#input\_squash\_merge\_commit\_message) | Can be 'PR\_BODY', 'COMMIT\_MESSAGES', or 'BLANK' | `string` | `null` | no |
 | <a name="input_squash_merge_commit_title"></a> [squash\_merge\_commit\_title](#input\_squash\_merge\_commit\_title) | Can be 'PR\_TITLE' or 'COMMIT\_OR\_PR\_TITLE' | `string` | `null` | no |
 | <a name="input_template"></a> [template](#input\_template) | Template repository to use | <pre>object({<br>    owner      = string<br>    repository = string<br>  })</pre> | `null` | no |
@@ -67,9 +84,21 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_actions_variables"></a> [actions\_variables](#output\_actions\_variables) | n/a |
-| <a name="output_html_url"></a> [html\_url](#output\_html\_url) | n/a |
-| <a name="output_repository"></a> [repository](#output\_repository) | n/a |
+| <a name="output_actions_secrets"></a> [actions\_secrets](#output\_actions\_secrets) | List of actions secrets for the repository |
+| <a name="output_actions_variables"></a> [actions\_variables](#output\_actions\_variables) | List of actions variables for the repository |
+| <a name="output_full_name"></a> [full\_name](#output\_full\_name) | A string of the form 'orgname/reponame' |
+| <a name="output_git_clone_url"></a> [git\_clone\_url](#output\_git\_clone\_url) | URL that can be provided to git clone to clone the repository anonymously via the git protocol |
+| <a name="output_html_url"></a> [html\_url](#output\_html\_url) | URL to the repository on the web |
+| <a name="output_http_clone_url"></a> [http\_clone\_url](#output\_http\_clone\_url) | URL that can be provided to git clone to clone the repository via HTTPS |
+| <a name="output_node_id"></a> [node\_id](#output\_node\_id) | GraphQL global node id for use with v4 API |
+| <a name="output_pages"></a> [pages](#output\_pages) | The repository's GitHub Pages configuration |
+| <a name="output_primary_language"></a> [primary\_language](#output\_primary\_language) | The primary language used in the repository |
+| <a name="output_repo_id"></a> [repo\_id](#output\_repo\_id) | GitHub ID for the repository |
+| <a name="output_repository"></a> [repository](#output\_repository) | All attributes of the created repository |
 | <a name="output_secrets"></a> [secrets](#output\_secrets) | n/a |
-| <a name="output_ssh_clone_url"></a> [ssh\_clone\_url](#output\_ssh\_clone\_url) | n/a |
+| <a name="output_security_and_analysis"></a> [security\_and\_analysis](#output\_security\_and\_analysis) | The repository's security and analysis configuration |
+| <a name="output_ssh_clone_url"></a> [ssh\_clone\_url](#output\_ssh\_clone\_url) | URL that can be provided to git clone to clone the repository via SSH |
+| <a name="output_svn_url"></a> [svn\_url](#output\_svn\_url) | URL that can be provided to svn checkout to check out the repository via GitHub's Subversion protocol emulation |
+| <a name="output_topics"></a> [topics](#output\_topics) | The list of topics of the repository |
+| <a name="output_visibility"></a> [visibility](#output\_visibility) | The visibility of the repository |
 <!-- END_TF_DOCS -->

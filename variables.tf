@@ -19,6 +19,10 @@ variable "visibility" {
   description = "Can be 'public' or 'private'"
   type        = string
   default     = null
+  validation {
+    condition     = var.visibility == null ? true : contains(["public", "private"], var.visibility)
+    error_message = "Visibility must be either 'public' or 'private'."
+  }
 }
 
 variable "has_issues" {
@@ -73,24 +77,40 @@ variable "squash_merge_commit_title" {
   description = "Can be 'PR_TITLE' or 'COMMIT_OR_PR_TITLE'"
   type        = string
   default     = null
+  validation {
+    condition     = var.squash_merge_commit_title == null ? true : contains(["PR_TITLE", "COMMIT_OR_PR_TITLE"], var.squash_merge_commit_title)
+    error_message = "Squash merge commit title must be either 'PR_TITLE' or 'COMMIT_OR_PR_TITLE'."
+  }
 }
 
 variable "squash_merge_commit_message" {
   description = "Can be 'PR_BODY', 'COMMIT_MESSAGES', or 'BLANK'"
   type        = string
   default     = null
+  validation {
+    condition     = var.squash_merge_commit_message == null ? true : contains(["PR_BODY", "COMMIT_MESSAGES", "BLANK"], var.squash_merge_commit_message)
+    error_message = "Squash merge commit message must be 'PR_BODY', 'COMMIT_MESSAGES', or 'BLANK'."
+  }
 }
 
 variable "merge_commit_title" {
   description = "Can be 'PR_TITLE' or 'MERGE_MESSAGE'"
   type        = string
   default     = null
+  validation {
+    condition     = var.merge_commit_title == null ? true : contains(["PR_TITLE", "MERGE_MESSAGE"], var.merge_commit_title)
+    error_message = "Merge commit title must be either 'PR_TITLE' or 'MERGE_MESSAGE'."
+  }
 }
 
 variable "merge_commit_message" {
   description = "Can be 'PR_BODY', 'PR_TITLE', or 'BLANK'"
   type        = string
   default     = null
+  validation {
+    condition     = var.merge_commit_message == null ? true : contains(["PR_BODY", "PR_TITLE", "BLANK"], var.merge_commit_message)
+    error_message = "Merge commit message must be 'PR_BODY', 'PR_TITLE', or 'BLANK'."
+  }
 }
 
 variable "delete_branch_on_merge" {
@@ -169,6 +189,21 @@ variable "pages" {
   default = null
 }
 
+variable "security_and_analysis" {
+  description = "Security and analysis settings for the repository"
+  type = object({
+    advanced_security = optional(object({
+      status = string
+    }))
+    secret_scanning = optional(object({
+      status = string
+    }))
+    secret_scanning_push_protection = optional(object({
+      status = string
+    }))
+  })
+  default = null
+}
 
 variable "plaintext_secrets" {
   description = "(Optional) Configuring plaintext actions secrets."
